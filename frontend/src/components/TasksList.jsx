@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { getAllTasks } from "../api/tasks.api";
+import { getAllCards } from "../api/cards.api";
 import { useState } from "react";
 import TaskCard from "./TaskCard";
 
@@ -7,11 +7,11 @@ const TasksList = () => {
   const [tasks, setTasks] = useState([]);
 
   useEffect (() => {
-    async function loadTasks() {
-      const res = await getAllTasks()
+    async function loadCards() {
+      const res = await getAllCards()
       setTasks(res.data)
     }
-    loadTasks();
+    loadCards();
   }, []);
 
   return (
