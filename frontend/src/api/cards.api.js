@@ -12,12 +12,12 @@ const cardsUrl = axios.create({
 
 export const getCard = (id) => cardsUrl.get(`/${id}/`);
 
-export const getAllCards = () => cardsUrl.get("/");
+export const getAllCards = (category, tag) => cardsUrl.get("/", { params: { category: category, tag: tag } });
 
 export const getAllQuizzs = (date) => cardsUrl.get("/quizz", { params: { date: date } });
 
 export const createCard = (card) => cardsUrl.post("", card);
 
-export const deleteCard = (id) => cardsUrl.delete(`/${id}`);
+export const selectFilter = () => cardsUrl.get("/select");
 
 export const updateCard = (id, card) => cardsUrl.patch(`/${id}/answer/`, card);

@@ -1,22 +1,13 @@
+import enum
 from sqlalchemy import (
-    create_engine,
     Column,
     Integer,
     String,
-    Boolean,
     TypeDecorator,
     Date,
 )
-from sqlalchemy.orm import sessionmaker, declarative_base
-import enum
-
-engine = create_engine("sqlite:///cards.sqlite")
-# engine = create_engine(
-#     "postgresql+psycopg2://myalchemy:mypass@localhost:5432/mysqlachemy", echo=False
-# )
-conn = engine.connect()
-
-Session = sessionmaker(bind=engine)
+from sqlalchemy.orm import declarative_base
+from .config import Session, engine
 
 # Créez une instance de session
 session = Session()
