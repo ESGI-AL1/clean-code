@@ -5,7 +5,7 @@ const Navigation = () => {
   return (
     <div className='pb-8'>
       <div className='grid grid-cols-5 gap-10 py-3'>
-        <Link className='col-start-2' to='/tasks'>
+        <Link className='col-start-2' to='/cards'>
           <h1 className='font-bold text-3xl'>Quizz App</h1>
         </Link>
         <div className='place-self-end'>
@@ -15,7 +15,7 @@ const Navigation = () => {
         </div>
         <div className='place-self-end'>
           <button className='bg-indigo-500 px-3 rounded-lg h-12'>
-            <Link to='/tasks-create'>Add Question</Link>        
+            <Link to='/cards-create'>Add Question</Link>        
           </button>      
         </div>
       </div>

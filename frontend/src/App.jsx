@@ -14,11 +14,11 @@ function App() {
       <div className='container max-w-4xl mx-auto'>
         <Navigation/>
         <Routes>
-          <Route path='/' element={<Navigate to='/tasks'/>}/>
-          <Route path='/tasks' element={<TasksPage />} />
+          <Route path='/' element={<Navigate to='/cards'/>}/>
+          <Route path='/cards' element={<TasksPage />} />
           <Route path='/quizz' element={<QuizzPage/>}/>
-          <Route path='/tasks-create' element={<TasksFormPage/>}/>
-          <Route path='/tasks/:id' element={<TasksAnswerPage/>}/>
+          <Route path='/cards-create' element={<TasksFormPage/>}/>
+          <Route path='/cards/:id' element={<TasksAnswerPage/>}/>
         </Routes>
         <Toaster position="bottom-right" reverseOrder={false}/>
       </div>

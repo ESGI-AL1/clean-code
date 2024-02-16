@@ -68,7 +68,7 @@ const TasksAnswerPage = () => {
       
     }
 
-    navigate('/tasks');
+    navigate('/quizz');
   });
 
   return (
