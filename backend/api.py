@@ -1,4 +1,7 @@
 from fastapi import FastAPI, Response, status
+from sqlalchemy import or_, and_
+import datetime
+
 from fastapi.middleware.cors import CORSMiddleware
 
 from pydantic import BaseModel
@@ -70,6 +73,49 @@ async def create_card(caruserdata: CardUserData):
 )
 async def get_all_cards():
     todos_query = session.query(CardModel)
+
+    date = datetime.datetime.utcnow().date()
+    # cat_1
+    past_date_1 = date - datetime.timedelta(days=1)
+
+    categories = [
+        Category.SECOND,
+        Category.THIRD,
+        Category.FOURTH,
+        Category.FIFTH,
+        Category.SIXTH,
+        Category.SEVENTH,
+    ]
+
+    first_cat = todos_query.filter(
+        or_(
+            and_(
+                CardModel.last_answered == past_date_1,
+                CardModel.category == Category.FIRST,
+            ),
+            CardModel.last_answered == None,
+        )
+    ).all()
+
+    query = first_cat
+
+    for i, category in enumerate(categories):
+
+        pass_days = 2 ** (i + 1)  # 2, 4, 8, 16, 32, 64
+        past_date_ = date - datetime.timedelta(days=pass_days)
+
+        q = (
+            session.query(CardModel)
+            .filter(
+                CardModel.last_answered == past_date_,
+                CardModel.category == category,
+            )
+            .all()
+        )
+
+        query.extend(q)
+
+    print(query)
     return [
         {
             "id": card.id,
@@ -77,8 +123,9 @@ async def get_all_cards():
             "question": card.question,
             "answer": card.answer,
             "tag": card.tag,
+            "last_answered": card.last_answered,
         }
-        for card in todos_query.all()
+        for card in first_cat  # todos_query.all()
     ]
 
 
@@ -123,9 +170,10 @@ async def answer_question(cardId: str, answer: CardAnswer, response: Response):
             category = Category.FIRST
 
         card.category = category
+        card.last_answered = datetime.datetime.utcnow()
         session.add(card)
         session.commit()
-        
+
     return {"detail": "Answer has been taken into account"}
 
 

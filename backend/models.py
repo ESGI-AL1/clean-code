@@ -1,4 +1,12 @@
-from sqlalchemy import create_engine, Column, Integer, String, Boolean, TypeDecorator
+from sqlalchemy import (
+    create_engine,
+    Column,
+    Integer,
+    String,
+    Boolean,
+    TypeDecorator,
+    Date,
+)
 from sqlalchemy.orm import sessionmaker, declarative_base
 import enum
 
@@ -34,6 +42,7 @@ class IntEnum(TypeDecorator):
     """
 
     impl = Integer
+    cache_ok = True
 
     def __init__(self, enumtype, *args, **kwargs):
         super(IntEnum, self).__init__(*args, **kwargs)
@@ -57,6 +66,7 @@ class Card(Base):
     answer = Column(String)
     tag = Column(String)
     category = Column(IntEnum(Category), default=Category.FIRST)
+    last_answered = Column(Date, nullable=True)
 
 
 Base.metadata.create_all(engine)
