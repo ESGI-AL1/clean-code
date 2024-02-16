@@ -82,28 +82,41 @@ async def get_all_cards():
     ]
 
 
+@app.get("/cards/quizz/")
+async def get_all_cards():
+    todos_query = session.query(CardModel)
+    return todos_query.all()
+
+
 @app.get(
     "/cards/{cardId}/",
 )
 async def get_all_cards(cardId: str, response: Response):
-    cards_query = session.query(CardModel).filter(CardModel.id == cardId)
-    card = cards_query.first()
-    if not card:
-        response.status_code = status.HTTP_404_NOT_FOUND
+    if cardId == "quizz":
+        todos_query = session.query(CardModel)
+        return [
+            {
+                "id": card.id,
+                "category": card.category.name,
+                "question": card.question,
+                "answer": card.answer,
+                "tag": card.tag,
+            }
+            for card in todos_query.all()
+        ]
+    else:
+        cards_query = session.query(CardModel).filter(CardModel.id == cardId)
+        card = cards_query.first()
+        if not card:
+            response.status_code = status.HTTP_404_NOT_FOUND
 
-    return {
-        "id": card.id,
-        "category": card.category.name,
-        "question": card.question,
-        "answer": card.answer,
-        "tag": card.tag,
-    }
-
-
-@app.get("/cards/quizz")
-async def get_all_cards():
-    todos_query = session.query(CardModel)
-    return todos_query.all()
+        return {
+            "id": card.id,
+            "category": card.category.name,
+            "question": card.question,
+            "answer": card.answer,
+            "tag": card.tag,
+        }
 
 
 @app.patch("/cards/{cardId}/answer/", status_code=204)
@@ -125,7 +138,7 @@ async def answer_question(cardId: str, answer: CardAnswer, response: Response):
         card.category = category
         session.add(card)
         session.commit()
-        
+
     return {"detail": "Answer has been taken into account"}
 
 

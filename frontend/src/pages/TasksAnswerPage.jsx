@@ -1,8 +1,8 @@
 import {useForm} from 'react-hook-form';
-import { updateTask } from '../api/tasks.api';
+import { updateCard } from '../api/cards.api';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect } from 'react';
-import { getTask } from '../api/tasks.api';
+import { getCard } from '../api/cards.api';
 import { toast } from 'react-hot-toast';
 
 const TasksAnswerPage = () => {
@@ -21,7 +21,7 @@ const TasksAnswerPage = () => {
     }
 
     const loadTask = async () => {
-      const {data} = await getTask(params.id);
+      const {data} = await getCard(params.id);
       setValue('question', data.question);
       setValue('answer', "");
       setValue('tag', data.tag);
@@ -45,7 +45,7 @@ const TasksAnswerPage = () => {
         const data = {
           "isValid":true
         }
-        await updateTask(params.id, data);    
+        await updateCard(params.id, data);    
         toast.success('Good!', {
           style: {
             background: '#101010',
@@ -57,7 +57,7 @@ const TasksAnswerPage = () => {
         const data = {
           "isValid":false
         }
-        await updateTask(params.id, data);    
+        await updateCard(params.id, data);    
         toast.error('Bad response', {
           style: {
             background: '#101010',

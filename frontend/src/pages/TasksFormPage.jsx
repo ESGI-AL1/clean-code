@@ -1,9 +1,8 @@
 import {useForm} from 'react-hook-form';
-import { createTask, updateTask } from '../api/tasks.api';
+import { createCard, updateCard } from '../api/cards.api';
 import { useNavigate, useParams } from 'react-router-dom';
-import { deleteTask } from '../api/tasks.api';
 import { useEffect } from 'react';
-import { getTask } from '../api/tasks.api';
+import { getCard } from '../api/cards.api';
 import { toast } from 'react-hot-toast';
 
 const TasksFormPage = () => {
@@ -22,7 +21,7 @@ const TasksFormPage = () => {
     }
 
     const loadTask = async () => {
-      const {data} = await getTask(params.id);
+      const {data} = await getCard(params.id);
       setValue('question', data.question);
       setValue('answer', data.answer);
     }
@@ -39,16 +38,16 @@ const TasksFormPage = () => {
 
   const onSubmit = handleSubmit(async (data) => {
     if (params.id) {
-      await updateTask(params.id, data);      
-      toast.success('Task updated successfully', {
+      await createCard(params.id, data);      
+      toast.success('Card updated successfully', {
         style: {
           background: '#101010',
           color: '#fff',
         }
       })
     } else {
-      await createTask(data)
-      toast.success('Task created successfully', {
+      await createCard(data)
+      toast.success('Card created successfully', {
         style: {
           background: '#101010',
           color: '#fff',
@@ -94,26 +93,7 @@ const TasksFormPage = () => {
         >
           Save
         </button>
-          {params.id && (
-              <button
-                className='bg-red-500 p-3 rounded-lg w-48 mt-3'
-                onClick={async () => {
-                  const accepted = window.confirm('Are you sure?');
-                  if (accepted) {
-                    await deleteTask(params.id);
-                    navigate('/tasks');
-                    toast.success('Task deleted successfully', {
-                      style: {
-                        background: '#101010',
-                        color: '#fff',
-                      }
-                    })
-                  }
-                }}
-              >
-                Delete
-              </button>
-          )}  
+          
         </div>
       </form>      
     </div>
