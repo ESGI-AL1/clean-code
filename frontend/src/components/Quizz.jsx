@@ -11,9 +11,10 @@ const Quizz = ({task}) => {
     >
         <h1 className='font-bold uppercase'> Question: {task.question}</h1>
         <p className='text-slate-400'>Category: {task.category}</p>
-        <p className='text-slate-400'>Tag: {task.tag}</p>
+      <p className='text-slate-400'>Tag: {task.tag}</p>
+      <p className='text-slate-400'>Last Answered: {task.last_answered}</p>
     </div>
-   );
+  );
 }
 
 Quizz.propTypes = {

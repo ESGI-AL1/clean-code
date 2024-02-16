@@ -12,6 +12,7 @@ const TaskCard = ({task}) => {
       <p className='text-slate-400'>Answer: {task.answer}</p>
       <p className='text-slate-400'>Category: {task.category}</p>
       <p className='text-slate-400'>Tag: {task.tag}</p>
+      <p className='text-slate-400'>Last Answered: {task.last_answered}</p>
       </div>
    );
 }
