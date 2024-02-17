@@ -2,10 +2,10 @@ import {useForm} from 'react-hook-form';
 import { useEffect } from "react";
 import { getAllCards, selectFilter } from "../api/cards.api";
 import { useState } from "react";
-import TaskCard from "./TaskCard";
+import Card from "./Card";
 
-const TasksList = () => {
-  const [tasks, setTasks] = useState([]);
+const CardsList = () => {
+  const [cards, setCards] = useState([]);
   const [selects, setSelects] = useState([]);
 
   const {register, handleSubmit, setValue, formState: {
@@ -14,7 +14,7 @@ const TasksList = () => {
 
   async function loadCards(category, tag) {
     const res = await getAllCards(category, tag)
-    setTasks(res.data)
+    setCards(res.data)
   }
 
   async function loadSelect() {
@@ -69,15 +69,15 @@ const TasksList = () => {
       </form>
       <hr className="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700" />
 
-      {tasks.map((task) => (
+      {cards.map((card) => (
       
-      <TaskCard 
-        key={task.id} 
-        task={task}
+      <Card 
+        key={card.id} 
+        card={card}
       />
     ))} 
     </div>
   );
 }
  
-export default TasksList;
+export default CardsList;

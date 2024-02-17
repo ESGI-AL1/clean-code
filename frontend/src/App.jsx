@@ -1,10 +1,10 @@
 import './App.css'
 import {BrowserRouter, Routes, Route, Navigate} from 'react-router-dom'
-import TasksPage from './pages/TasksPage'
+import CardsPage from './pages/CardsPage'
 import QuizzPage from './pages/QuizzPage'
 
-import TasksFormPage from './pages/TasksFormPage'
-import TasksAnswerPage from './pages/TasksAnswerPage'
+import CardsFormPage from './pages/CardsFormPage'
+import CardsAnswerPage from './pages/CardsAnswerPage'
 import Navigation from './components/Navigation'
 import {Toaster} from 'react-hot-toast'
 
@@ -15,10 +15,10 @@ function App() {
         <Navigation/>
         <Routes>
           <Route path='/' element={<Navigate to='/cards'/>}/>
-          <Route path='/cards' element={<TasksPage />} />
+          <Route path='/cards' element={<CardsPage />} />
           <Route path='/quizz' element={<QuizzPage/>}/>
-          <Route path='/cards-create' element={<TasksFormPage/>}/>
-          <Route path='/cards/:id' element={<TasksAnswerPage/>}/>
+          <Route path='/cards-create' element={<CardsFormPage/>}/>
+          <Route path='/cards/:id' element={<CardsAnswerPage/>}/>
         </Routes>
         <Toaster position="bottom-right" reverseOrder={false}/>
       </div>

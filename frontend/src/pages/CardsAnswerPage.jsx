@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 import { getCard } from '../api/cards.api';
 import { toast } from 'react-hot-toast';
 
-const TasksAnswerPage = () => {
+const CardsAnswerPage = () => {
   const {register, handleSubmit, setValue, formState: {
     errors
   }} = useForm();
@@ -104,4 +104,4 @@ const TasksAnswerPage = () => {
   );
 }
  
-export default TasksAnswerPage;
+export default CardsAnswerPage;
