@@ -13,7 +13,8 @@ router = APIRouter()
 @router.get("/cards/quizz")
 async def get_all_cards(date: Optional[str] = None):
 
-    todos_query = session.query(CardModel)
+    todos_query = session.query(CardModel).filter(category != Category.DONE)
+
     if date is None:
         date = datetime.datetime.utcnow().date()
     else:

@@ -24,3 +24,6 @@ npm install
 npm run dev
 
 ```
+
+https://pytest-with-eric.com/pytest-advanced/pytest-fastapi-testing/
+https://playwright.dev/python/docs/running-tests
