@@ -12,9 +12,10 @@ cd chancy
 cd backend
 python3 -m venv venv
 source venv/bin/activate
+venv/bin/activate => Windows
 
 # run back-end
-python api.py
+python main.py
 
 
 # Front-end
