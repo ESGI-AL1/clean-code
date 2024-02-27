@@ -10,6 +10,15 @@ const cardsUrl = axios.create({
   baseURL: `${URL}/cards`,
 });
 
+
+cardsUrl.interceptors.request.use((config) => {
+  const token = localStorage.getItem('token');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
 export const getCard = (id) => cardsUrl.get(`/${id}/`);
 
 export const getAllCards = (category, tag) => cardsUrl.get("/", { params: { category: category, tag: tag } });
