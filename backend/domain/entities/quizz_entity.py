@@ -9,8 +9,10 @@ class SQLAlchemyQuizzRepository(QuizzRepository):
     def __init__(self):
         self.db = session
 
-    def get_all_quizz(self, date=None):
-        cards = session.query(Card).filter(Card.category != Category.DONE)
+    def get_all_quizz(self, userid, date=None):
+        cards = session.query(Card).filter(
+            Card.category != Category.DONE, Card.author_id == userid
+        )
 
         if date is None:
             date = datetime.datetime.utcnow().date()
@@ -44,23 +46,21 @@ class SQLAlchemyQuizzRepository(QuizzRepository):
 
             pass_days = 2 ** (i + 1)  # 2, 4, 8, 16, 32, 64
             past_date_ = date - datetime.timedelta(days=pass_days)
-            print(past_date_, category)
-            q = (
-                session.query(Card)
-                .filter(
-                    Card.last_answered == past_date_,
-                    Card.category == category,
-                )
-                .all()
-            )
+            q = cards.filter(
+                Card.last_answered == past_date_,
+                Card.category == category,
+            ).all()
 
             query.extend(q)
 
         return query
 
-    def answer_question(self, card_id, answer) -> Card:
-        cards_query = session.query(Card).filter(Card.id == card_id)
-        card = cards_query.first()
+    def answer_question(self, card_id, answer, userid) -> Card:
+        card = (
+            session.query(Card)
+            .filter(Card.id == card_id, Card.author_id == userid)
+            .first()
+        )
 
         if not card:
             return None

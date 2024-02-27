@@ -7,8 +7,8 @@ class SQLAlchemyCardRepository(CardRepository):
     def __init__(self):
         self.db = session
 
-    def get_all_cards(self, category=None, tag=None):
-        cards = session.query(Card)
+    def get_all_cards(self, userid, category=None, tag=None):
+        cards = session.query(Card).filter(Card.author_id == userid)
         if category is not None and category != "DEFAULT":
             cards = cards.filter(Card.category == Category[category])
         if tag is not None and tag != "DEFAULT":
@@ -16,14 +16,19 @@ class SQLAlchemyCardRepository(CardRepository):
 
         return cards
 
-    def get_card_by_id(self, card_id: str) -> Card:
-        return self.db.query(Card).filter(Card.id == card_id).first()
+    def get_card_by_id(self, card_id: str, userid) -> Card:
+        return (
+            self.db.query(Card)
+            .filter(Card.id == card_id, Card.author_id == userid)
+            .first()
+        )
 
-    def create_card(self, caruserdata) -> Card:
+    def create_card(self, caruserdata, userid) -> Card:
         card = Card(
             question=caruserdata.question,
             answer=caruserdata.answer,
             tag=caruserdata.tag,
+            author_id=userid,
             id=str(uuid.uuid4()),
         )
 
