@@ -1,8 +1,9 @@
 import {useForm} from 'react-hook-form';
-import { useEffect } from "react";
+import { useEffect, useContext } from "react";
 import { getAllCards, selectFilter } from "../api/cards.api";
 import { useState } from "react";
 import Card from "./Card";
+
 
 const CardsList = () => {
   const [cards, setCards] = useState([]);
@@ -41,7 +42,7 @@ const CardsList = () => {
     <div className="grid grid-cols-1 gap-1">
       <form onSubmit={onSubmit} className="inline-grid grid-cols-3 gap-4">
         <label htmlFor="underline_select" className="sr-only">Underline select</label>
-        <select defaultValue={'DEFAULT'}
+        <select defaultValue=""
           id="underline_select"
           {...register('category', {required: false})}
           className="block py-2.5 px-0 w-full text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer">
@@ -51,7 +52,7 @@ const CardsList = () => {
           ))}
         </select>
         <label htmlForfor="underline_select" className="sr-only">Underline select</label>
-        <select defaultValue={'DEFAULT'}
+        <select defaultValue=""
           id="underline_select"
           {...register('tag', {required: false})}
           className="block py-2.5 px-0 w-full text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer">
