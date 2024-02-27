@@ -1,18 +1,26 @@
-from fastapi import APIRouter, Response, status
+from fastapi import APIRouter, Response, status, Depends
 from typing import Optional
 
 from infrastructure.presenters.card_presenter import CardAnswer
 from domain.entities.quizz_entity import SQLAlchemyQuizzRepository
 
+from .utils import (
+    oauth2_scheme,
+    decode_token,
+)
 
 router = APIRouter()
 sql_alchemy_quizz_repo = SQLAlchemyQuizzRepository()
 
 
 @router.get("/cards/quizz")
-async def get_all_quizz(date: Optional[str] = None):
-
-    cards = sql_alchemy_quizz_repo.get_all_quizz(date)
+async def get_all_quizz(
+    date: Optional[str] = None, token: str = Depends(oauth2_scheme)
+):
+    payload = decode_token(token)
+    userid = payload.get("userid")
+    print(userid)
+    cards = sql_alchemy_quizz_repo.get_all_quizz(userid, date)
 
     return [
         {
@@ -28,9 +36,16 @@ async def get_all_quizz(date: Optional[str] = None):
 
 
 @router.patch("/cards/{cardId}/answer/", status_code=204)
-async def answer_question(cardId: str, answer: CardAnswer, response: Response):
+async def answer_question(
+    cardId: str,
+    answer: CardAnswer,
+    response: Response,
+    token: str = Depends(oauth2_scheme),
+):
     "Answer a question"
-    updated = sql_alchemy_quizz_repo.answer_question(cardId, answer)
+    payload = decode_token(token)
+    userid = payload.get("userid")
+    updated = sql_alchemy_quizz_repo.answer_question(cardId, answer, userid)
     if not updated:
         response.status_code = status.HTTP_404_NOT_FOUND
 

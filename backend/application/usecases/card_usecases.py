@@ -1,29 +1,26 @@
-from fastapi import APIRouter, Response, status
+from fastapi import APIRouter, Response, status, Depends
 from typing import Optional
 
-from infrastructure.presenters.card_presenter import CardUserData
-from domain.entities.card_entity import SQLAlchemyCardRepository
+from infrastructure.presenters.card_presenter import CardAnswer
+from domain.entities.quizz_entity import SQLAlchemyQuizzRepository
 
+from .utils import (
+    oauth2_scheme,
+    decode_token,
+)
 
 router = APIRouter()
-sqlalchemy_card_repository = SQLAlchemyCardRepository()
+sql_alchemy_quizz_repo = SQLAlchemyQuizzRepository()
 
 
-@router.post("/cards/", status_code=201)
-async def create_card(caruserdata: CardUserData):
-    card = sqlalchemy_card_repository.create_card(caruserdata)
-    return {
-        "id": card.id,
-        "category": card.category.name,
-        "question": card.question,
-        "answer": card.answer,
-        "tag": card.tag,
-    }
-
-
-@router.get("/cards/")
-async def get_all_cards(category: Optional[str] = None, tag: Optional[str] = None):
-    cards = sqlalchemy_card_repository.get_all_cards(category, tag)
+@router.get("/cards/quizz")
+async def get_all_quizz(
+    date: Optional[str] = None, token: str = Depends(oauth2_scheme)
+):
+    payload = decode_token(token)
+    userid = payload.get("userid")
+    print(userid)
+    cards = sql_alchemy_quizz_repo.get_all_quizz(userid, date)
 
     return [
         {
@@ -34,20 +31,22 @@ async def get_all_cards(category: Optional[str] = None, tag: Optional[str] = Non
             "tag": card.tag,
             "last_answered": card.last_answered,
         }
-        for card in cards.all()
+        for card in cards
     ]
 
 
-@router.get("/cards/{cardId}/")
-async def get_card_by_id(cardId: str, response: Response):
-    card = sqlalchemy_card_repository.get_card_by_id(cardId)
-    if not card:
+@router.patch("/cards/{cardId}/answer/", status_code=204)
+async def answer_question(
+    cardId: str,
+    answer: CardAnswer,
+    response: Response,
+    token: str = Depends(oauth2_scheme),
+):
+    "Answer a question"
+    payload = decode_token(token)
+    userid = payload.get("userid")
+    updated = sql_alchemy_quizz_repo.answer_question(cardId, answer, userid)
+    if not updated:
         response.status_code = status.HTTP_404_NOT_FOUND
 
-    return {
-        "id": card.id,
-        "category": card.category.name,
-        "question": card.question,
-        "answer": card.answer,
-        "tag": card.tag,
-    }
+    return {"detail": "Answer has been taken into account"}
