@@ -3,14 +3,19 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 
-from application.usecases import select_usecases
-from application.usecases import card_usecases, quizz_usecases
+from application.usecases import (
+    select_usecases,
+    card_usecases,
+    quizz_usecases,
+    auth_usecase,
+)
 
 app = FastAPI()
 
 app.include_router(card_usecases.router)
 app.include_router(quizz_usecases.router)
 app.include_router(select_usecases.router)
+app.include_router(auth_usecase.router)
 
 origins = [
     "http://localhost",
