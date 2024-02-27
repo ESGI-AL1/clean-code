@@ -1,5 +1,5 @@
 import { Link, Navigate } from 'react-router-dom'
-import LogoutButton from './LogoutButton';
+import LogoutButton from './LayoutButton';
 import LoginRegisterButton from './LoginRegisterButton';
 import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
