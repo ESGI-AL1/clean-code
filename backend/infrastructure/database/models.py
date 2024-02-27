@@ -1,18 +1,16 @@
 import enum
-from sqlalchemy import (
-    Column,
-    Integer,
-    String,
-    TypeDecorator,
-    Date,
-)
-from sqlalchemy.orm import declarative_base
+from passlib.context import CryptContext
+
+from sqlalchemy import Column, Integer, String, TypeDecorator, Date, ForeignKey
+from sqlalchemy.orm import declarative_base, relationship
 from .config import Session, engine
 
 
 session = Session()
 
 Base = declarative_base()
+# Password hashing
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
 class Category(enum.IntEnum):
@@ -49,6 +47,21 @@ class IntEnum(TypeDecorator):
         return self._enumtype(value)
 
 
+class User(Base):
+    __tablename__ = "users"
+    id = Column(Integer, primary_key=True)
+    username = Column(String, nullable=False)
+    first_name = Column(String, nullable=False)
+    last_name = Column(String, nullable=False)
+    password = Column(String, nullable=False)
+
+    def set_password(self, password):
+        self.password = pwd_context.hash(password)
+
+    def verify_password(self, password):
+        return pwd_context.verify(password, self.password)
+
+
 class Card(Base):
     __tablename__ = "cards"
 
@@ -58,6 +71,8 @@ class Card(Base):
     tag = Column(String)
     category = Column(IntEnum(Category), default=Category.FIRST)
     last_answered = Column(Date, nullable=True)
+    author = relationship("User")  # Lien avec la classe User
+    author_id = Column(Integer, ForeignKey("users.id"))  # Ref a la table user
 
 
 Base.metadata.create_all(engine)
